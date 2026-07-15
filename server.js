@@ -60,6 +60,23 @@ function formatEvent(body) {
   if (type === "release.rejected") {
     return `❌ Отклонён\n${title}${artists}\nПричина: ${body.reason || "—"}\n#${body.releaseId || "?"}`;
   }
+  if (type === "application_submitted") {
+    return (
+      `📝 Новая заявка артиста\n` +
+      `${body.name || "—"} · ${body.email || ""}\n` +
+      `${body.prospectsText ? body.prospectsText.slice(0, 200) + "…" : ""}\n` +
+      `${body.demoUrl || ""}\n${site}/admin`
+    );
+  }
+  if (type === "application_approved") {
+    return `✅ Заявка одобрена\n${body.name || "—"} · ${body.email || ""}`;
+  }
+  if (type === "application_rejected") {
+    return (
+      `❌ Заявка отклонена\n${body.name || "—"} · ${body.email || ""}\n` +
+      `Причина: ${body.reason || "—"}\nПовтор с: ${body.reapplyAt || "—"}`
+    );
+  }
   return `RVVIRC: ${type}\n${title}${artists}`;
 }
 
@@ -83,7 +100,10 @@ app.post("/hook", async (req, res) => {
   if (
     body.telegramChatId &&
     String(body.telegramChatId) !== String(ADMIN_CHAT) &&
-    (body.type === "release.approved" || body.type === "release.rejected")
+    (body.type === "release.approved" ||
+      body.type === "release.rejected" ||
+      body.type === "application_approved" ||
+      body.type === "application_rejected")
   ) {
     jobs.push(tgSend(body.telegramChatId, text));
   }
