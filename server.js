@@ -188,11 +188,20 @@ async function handleContact(msg) {
       reply_markup: { remove_keyboard: true },
     });
   } else {
-    await tgSend(
-      chatId,
-      "Не удалось подтвердить (ссылка устарела). Создайте новую в кабинете.",
-      { reply_markup: { remove_keyboard: true } }
-    );
+    let detail =
+      "Не удалось подтвердить (ссылка устарела). Создайте новую в кабинете.";
+    try {
+      const body = await verifyRes.json();
+      if (body && body.error === "phone_limit") {
+        detail =
+          "Этот номер уже привязан к 2 аккаунтам RVVIRC — больше нельзя. Используйте другой номер или войдите в один из существующих аккаунтов.";
+      }
+    } catch {
+      /* keep default */
+    }
+    await tgSend(chatId, detail, {
+      reply_markup: { remove_keyboard: true },
+    });
   }
 }
 
