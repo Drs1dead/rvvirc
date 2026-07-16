@@ -9,7 +9,16 @@
 - `NOTIFY_SECRET` — тот же, что на сайте (`NOTIFY_SECRET`)
 - `TELEGRAM_BOT_TOKEN` — от @BotFather
 - `TELEGRAM_ADMIN_CHAT_ID` — твой chat id (можно узнать через @userinfobot)
-- `SITE_URL` — например `https://by.rvvirc.site` (куда слать bind)
+- `SITE_URL` — например `https://by.rvvirc.site` (куда слать bind / support reply)
+
+## Поддержка (почта + сайт)
+
+Сайт шлёт `support.site_message` / `support.email_message` на `/hook`.
+Бот рассылает админу (`TELEGRAM_ADMIN_CHAT_ID`) и агентам из `agentChatIds`.
+
+Инвайт агента: `t.me/BOT?start=support_<token>` (создаётся в админке сайта).
+
+Инлайн: **Ответить** → следующее сообщение → SMTP через сайт; **Закрыть** → статус closed.
 
 ## Запуск локально
 
